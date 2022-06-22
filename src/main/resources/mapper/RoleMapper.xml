@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.blogserver.mapper.RoleMapper">
+
+    <resultMap type="com.blog.blogserver.entity.Role" id="RoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="createRole" useGeneratedKeys="true" keyProperty="id">
+        insert into role (name, createtime) values (#{name},#{createtime})
+    </insert>
+
+    <delete id="deleteRole">
+        delete from role where id = #{roleId}
+    </delete>
+
+    <delete id="deleteUserRoles">
+        delete from user_roles where roles_id = #{roleId}
+    </delete>
+
+    <update id="updateRole">
+        update role set name = #{name},updatetime = #{updatetime} where id = #{id}
+    </update>
+
+    <select id="findRoleByName" resultMap="RoleMap">
+        select * from role where name = #{name}
+    </select>
+
+    <select id="getRoleLikeName" resultMap="RoleMap">
+        select * from role where name like #{name}
+    </select>
+
+    <select id="getRoleById" resultMap="RoleMap">
+        select * from role where id = #{roleId}
+    </select>
+
+    <select id="getRoleByUserId" resultMap="RoleMap">
+        SELECT * FROM role WHERE id IN (
+            SELECT roles_id FROM user_roles WHERE user_id = #{id}
+        )
+    </select>
+
+    <select id="getAllRoles" resultMap="RoleMap">
+        select * from role
+    </select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.blogserver.mapper.TagMapper">
+
+    <resultMap type="com.blog.blogserver.entity.Tag" id="TagMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="createTag" useGeneratedKeys="true" keyProperty="id">
+        insert into tag (name, createtime) values (#{name},#{createtime})
+    </insert>
+
+    <delete id="deleteTag">
+        delete from tag where id = #{tagId}
+    </delete>
+
+    <delete id="deleteArticleTags">
+        delete from article_tags where tags_id = #{tagId}
+    </delete>
+
+    <update id="updateTag">
+        update tag set name = #{name},updatetime = #{updatetime} where id = #{id}
+    </update>
+
+    <select id="getTagLikeName" resultMap="TagMap">
+        select * from tag where name like #{name}
+    </select>
+
+    <select id="getTagById" resultMap="TagMap">
+        select * from tag where id = #{tagId}
+    </select>
+
+    <select id="getTagByArticleId"  resultMap="TagMap">
+        SELECT * FROM tag WHERE id IN (
+            SELECT tags_id FROM article_tags WHERE article_id = #{id}
+        )
+    </select>
+
+    <select id="findTagByName" resultMap="TagMap">
+        select * from tag where name = #{name}
+    </select>
+
+    <select id="getAllTags" resultMap="TagMap">
+        select * from tag
+    </select>
+
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.blogserver.mapper.CommentMapper">
+
+    <resultMap type="com.blog.blogserver.entity.Comment" id="CommentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <association property="article" column="article_id" select="com.blog.blogserver.mapper.ArticleMapper.getArticleById"  javaType="com.blog.blogserver.entity.Article"/>
+        <association property="user" column="user_id" select="com.blog.blogserver.mapper.UserMapper.getUserById"  javaType="com.blog.blogserver.entity.User"/>
+    </resultMap>
+
+    <insert id="createComment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment ( content, createtime, article_id, user_id) values (#{content},#{createtime},#{articleId},#{userId})
+    </insert>
+
+    <delete id="deleteComment">
+        delete from comment where id = #{commentId}
+    </delete>
+
+    <delete id="deleteArticleComment">
+        delete from article_comments where comments_id = #{commentId}
+    </delete>
+
+    <update id="updateComment">
+        update comment set content = #{content},updatetime = #{updatetime} where id = #{id}
+    </update>
+
+    <select id="getCommentById" resultMap="CommentMap">
+        select * from comment where id = #{commentId}
+    </select>
+
+    <select id="getCommentLikeContent" resultMap="CommentMap">
+        select * from comment where content like #{content}
+    </select>
+
+    <select id="getCommentByArticleId" resultMap="CommentMap">
+        select * from comment where id in(select comments_id from article_comments where article_id = #{articleId})
+    </select>
+
+    <select id="getAllComments" resultMap="CommentMap">
+        select * from comment
+    </select>
+
+    <select id="getCommentsByUserId" resultMap="CommentMap">
+        select * from comment where user_id = #{userId}
+    </select>
+
+    <select id="getCommentsLikeContent" resultMap="CommentMap">
+        select * from comment where content like #{content}
+    </select>
+
+</mapper>

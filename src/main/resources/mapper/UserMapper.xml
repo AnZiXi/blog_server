@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.blogserver.mapper.UserMapper">
+
+    <resultMap type="com.blog.blogserver.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <collection property="roles" column="id" javaType="ArrayList" ofType="com.blog.blogserver.entity.Role" select="com.blog.blogserver.mapper.RoleMapper.getRoleByUserId" fetchType="lazy">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserByUsername" resultMap="UserMap">
+        select * from user where username=#{username}
+    </select>
+
+    <select id="findUserByNickname" resultMap="UserMap">
+        select * from user where nickname = #{nickname}
+    </select>
+
+    <select id="getUserLikeUsername" resultMap="UserMap">
+        select * from user where username like #{username}
+    </select>
+
+    <select id="getUserLikeNickname" resultMap="UserMap">
+        select * from user where nickname like #{nickname}
+    </select>
+
+    <select id="getUserById" resultMap="UserMap">
+        select * from user where id = #{userId}
+    </select>
+
+    <select id="getAllUsers" resultMap="UserMap">
+        select * from user
+    </select>
+
+    <insert id="createUser" useGeneratedKeys = "true" keyProperty = "id">
+        insert into user (username, password, nickname, createtime) values (#{username},#{password},#{nickname},#{createtime})
+    </insert>
+
+    <insert id="addUserRoles">
+        insert into user_roles (user_id, roles_id) values
+        (#{userId},#{roleId})
+    </insert>
+
+    <update id="updateUser">
+        update user set nickname = #{nickname},updatetime = #{updatetime} where id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        delete  from user where id = #{userId}
+    </delete>
+
+    <delete id="deleteUserRoles">
+        delete from user_roles where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserArticles">
+        delete from article where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserComments">
+        delete from comment where user_id = #{userId}
+    </delete>
+
+
+    <delete id="deleteUsersArticles">
+        delete  from article where id in
+        <foreach collection="userIds" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>
