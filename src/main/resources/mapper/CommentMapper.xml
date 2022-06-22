@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.blog.blogserver.mapper.CommentMapper">
+<mapper namespace="com.blog.blog_server.mapper.CommentMapper">
 
-    <resultMap type="com.blog.blogserver.entity.Comment" id="CommentMap">
+    <resultMap type="com.blog.blog_server.entity.Comment" id="CommentMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
         <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
         <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
         <result property="articleId" column="article_id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
-        <association property="article" column="article_id" select="com.blog.blogserver.mapper.ArticleMapper.getArticleById"  javaType="com.blog.blogserver.entity.Article"/>
-        <association property="user" column="user_id" select="com.blog.blogserver.mapper.UserMapper.getUserById"  javaType="com.blog.blogserver.entity.User"/>
+        <association property="article" column="article_id" select="com.blog.blog_server.mapper.ArticleMapper.getArticleById" javaType="com.blog.blog_server.entity.Article"/>
+        <association property="user" column="user_id" select="com.blog.blog_server.mapper.UserMapper.getUserById" javaType="com.blog.blog_server.entity.User"/>
     </resultMap>
 
     <insert id="createComment" useGeneratedKeys="true" keyProperty="id">

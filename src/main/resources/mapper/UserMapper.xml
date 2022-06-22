@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.blog.blogserver.mapper.UserMapper">
+<mapper namespace="com.blog.blog_server.mapper.UserMapper">
 
-    <resultMap type="com.blog.blogserver.entity.User" id="UserMap">
+    <resultMap type="com.blog.blog_server.entity.User" id="UserMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
         <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
-        <collection property="roles" column="id" javaType="ArrayList" ofType="com.blog.blogserver.entity.Role" select="com.blog.blogserver.mapper.RoleMapper.getRoleByUserId" fetchType="lazy">
+        <collection property="roles" column="id" javaType="ArrayList" ofType="com.blog.blog_server.entity.Role" select="com.blog.blog_server.mapper.RoleMapper.getRoleByUserId" fetchType="lazy">
             <result property="id" column="id" jdbcType="INTEGER"/>
             <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
